@@ -1,0 +1,68 @@
+<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	</head>
+ <body style="background:url(blu.jpg) fixed;">
+	<p><span><img align="right"; src="umg.png" alt="" width="228" height="210" /></span></p>
+	<fieldset>
+		<p>
+			<h2 style= "text-align:center">Este es un corto Ejemplo de la Funcionalidad de Congnitive Services de Microsoft, EMOTION API</h2>
+		</p>
+	</fieldset>
+	</br></br>
+	<fieldset style=" width: 40%; margin: 0 auto 0 auto">
+		<input type="file" id="filename" name="filename[]" accept="image/jpeg, image/png">
+	</fieldset>
+	<fieldset style=" width: 40%; margin: 0 auto 0 auto">
+		<button id="btn">Prueba la API</button>
+		<p id="response"></p>
+	</fieldset>
+ 
+ <script type="text/javascript">
+	//apiKey: Remplazar la key de microsoft/congniiveServices para poder generar el servicio 
+	var apiKey = "824450732c2649269bf93efb6bef26e5";
+ 
+	//apiUrl: La url para la la API y su documetacion
+	var apiUrl = "https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize";
+ 
+	$('#btn').click(function () 
+	{
+		//file: El archivo que se llama con el search para poder escanearla con la api
+		var file = document.getElementById('filename').files[0];
+		CallAPI(file, apiUrl, apiKey);
+	});
+ 
+	function CallAPI(file, apiUrl, apiKey)
+	{
+		$.ajax
+		({
+			url: apiUrl,
+			beforeSend: function (xhrObj) 
+			{
+				xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
+				xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", apiKey);
+			},
+			type: "POST",
+			data: file,
+			processData: false
+		})
+		.done(function (response) 
+		{
+			ProcessResult(response);
+		})
+		.fail(function (error) 
+		{
+			$("#response").text(error.getAllResponseHeaders());
+		});
+	}
+ 
+	function ProcessResult(response)
+	{
+		var data = JSON.stringify(response);
+		$("#response").text(data);
+	}
+ </script>
+ 
+
+ </body>
+ </html>
